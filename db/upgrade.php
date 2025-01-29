@@ -15,20 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
- *
- * @package    tool
+ * @package tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author Jordi Pujol-Ahulló <jordi.pujol@urv.cat>
+ * @copyright 2013 Servei de Recursos Educatius (http://www.sre.urv.cat)
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
@@ -72,6 +63,21 @@ function xmldb_tool_iomadmerge_upgrade ($oldversion) {
 
         // iomadmerge savepoint reached
         upgrade_plugin_savepoint(true, 2013112912, 'tool', 'iomadmerge');
+    }
+
+    if ($oldversion < 2023040401) {
+
+        // Define field mergedbyuserid to be added to tool_iomadmerge.
+        $table = new xmldb_table('tool_iomadmerge');
+        $field = new xmldb_field('mergedbyuserid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'success');
+
+        // Conditionally launch add field mergedbyuserid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Mergeusers savepoint reached.
+        upgrade_plugin_savepoint(true, 2023040401, 'tool', 'iomadmerge');
     }
 
     return true;

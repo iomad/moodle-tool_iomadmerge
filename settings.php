@@ -19,15 +19,12 @@
  *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
  * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
  * @author     Mike Holzer
  * @author     Forrest Gaston
  * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
  * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -64,19 +61,19 @@ if ($hassiteconfig) {
         get_string('suspenduser_setting_desc', 'tool_iomadmerge'),
         1));
 
-    $supporting_lang = (tool_iomadmerge_transactionssupported()) ? 'transactions_supported' : 'transactions_not_supported';
+    $supportinglang = (tool_iomadmerge_transactionssupported()) ? 'transactions_supported' : 'transactions_not_supported';
 
     $settings->add(new admin_setting_configcheckbox('tool_iomadmerge/transactions_only',
         get_string('transactions_setting', 'tool_iomadmerge'),
         get_string('transactions_setting_desc', 'tool_iomadmerge') . '<br /><br />' .
-            get_string($supporting_lang, 'tool_iomadmerge'),
+            get_string($supportinglang, 'tool_iomadmerge'),
         1));
 
     $exceptionoptions = tool_iomadmerge_build_exceptions_options();
     $settings->add(new admin_setting_configmultiselect('tool_iomadmerge/excluded_exceptions',
         get_string('excluded_exceptions', 'tool_iomadmerge'),
         get_string('excluded_exceptions_desc', 'tool_iomadmerge', $exceptionoptions->defaultvalue),
-        array($exceptionoptions->defaultkey), //default value: empty => apply all exceptions.
+        array($exceptionoptions->defaultkey), // Default value: empty => apply all exceptions.
         $exceptionoptions->options));
 
     // Quiz attempts.
@@ -93,6 +90,6 @@ if ($hassiteconfig) {
         get_string('uniquekeynewidtomaintain_desc', 'tool_iomadmerge'),
         1));
 
-    // Add settings
+    // Add settings.
     $ADMIN->add('tools', $settings);
 }

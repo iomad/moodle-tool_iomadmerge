@@ -22,14 +22,11 @@
  *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
  * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
  * @author     Mike Holzer
  * @author     Forrest Gaston
  * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
+ * @author     Jordi Pujol-Ahulló <jordi.pujol@urv.cat>,  SREd, Universitat Rovira i Virgili
  * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -41,14 +38,13 @@ global $CFG;
 
 require_once $CFG->dirroot . '/lib/clilib.php';
 require_once __DIR__ . '/autoload.php';
-require_once $CFG->dirroot . '/local/iomad/lib/company.php';
 
 /**
  * A class to perform user search and lookup (verification)
  *
  * @author John Hoopes <hoopes@wisc.edu>
  */
-class IomadMergeSearch{
+class IOMADMergeUserSearch{
 
 
     /**
@@ -59,33 +55,7 @@ class IomadMergeSearch{
      * @return array $results the results of the search
      */
     public function search_users($input, $searchfield){
-        global $DB, $USER;
-
-        if (!iomad::has_capability('block/iomad_company_admin:editallusers', context_system::instance())) {
-            // Get the user id's which the user can see.
-            $companyid = iomad::get_my_companyid(context_system::instance());
-            $company = new company($companyid);
-            $userlevels = $company->get_userlevel($USER);
-            $departmentusers = array();
-            foreach ($userlevels as $userlevelid => $userlevel) {
-                $departmentusers = $departmentusers + company::get_recursive_department_users($userlevelid);
-            }
-            if (!empty($departmentusers)) {
-                $departmentids = "";
-                foreach ($departmentusers as $departmentuser) {
-                    if (!empty($departmentids)) {
-                        $departmentids .= ",".$departmentuser->userid;
-                    } else {
-                        $departmentids .= $departmentuser->userid;
-                    }
-                }
-                $departmentsql = " AND id IN (" . $departmentids . ")";
-            } else {
-                $departmentsql = " AND 1 = 2 ";
-            }
-        } else {
-            $departmentsql = "";
-        }
+        global $DB;
 
         switch($searchfield){
             case 'id': // search on id field
@@ -161,7 +131,7 @@ class IomadMergeSearch{
                 break;
         }
 
-        $ordering = ' $departmentsql ORDER BY lastname, firstname';
+        $ordering = ' ORDER BY lastname, firstname';
 
         $results = $DB->get_records_sql($sql . $ordering, $params);
         return $results;

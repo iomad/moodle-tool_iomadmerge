@@ -16,20 +16,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
- *
- * @package    tool
- * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author Jordi Pujol-Ahulló <jordi.pujol@urv.cat>
+ * @author John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @copyright 2013 Servei de Recursos Educatius (http://www.sre.urv.cat)
  */
 defined('MOODLE_INTERNAL') || die();
 
@@ -41,7 +30,7 @@ require_once($CFG->dirroot . '/'.$CFG->admin.'/tool/iomadmerge/lib.php');
  * Renderer for the merge user plugin.
  *
  * @package    tool
- * @subpackage iomadmerge
+ * @subpackage mergeuser
  * @copyright  2013 Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -285,7 +274,7 @@ class tool_iomadmerge_renderer extends plugin_renderer_base
     /**
      * Produces the page with the list of logs.
      * TODO: make pagination.
-     * @global type $CFG
+     *
      * @param array $logs array of logs.
      * @return string the corresponding HTML.
      */
@@ -305,9 +294,19 @@ class tool_iomadmerge_renderer extends plugin_renderer_base
             $flags[] = $this->pix_icon('i/invalid', get_string('eventusermergedfailure', 'tool_iomadmerge')); //failure icon
             $flags[] = $this->pix_icon('i/valid', get_string('eventusermergedsuccess', 'tool_iomadmerge')); //ok icon
 
+            $output .= html_writer::link(new moodle_url('/admin/tool/iomadmerge/view.php', ['export' => 1]),
+                    get_string('exportlogs', 'tool_iomadmerge'));
+
             $table = new html_table();
             $table->align = array('center', 'center', 'center', 'center', 'center', 'center');
-            $table->head = array(get_string('olduseridonlog', 'tool_iomadmerge'), get_string('newuseridonlog', 'tool_iomadmerge'), get_string('date'), get_string('status'), '');
+            $table->head = array(
+                get_string('olduseridonlog', 'tool_iomadmerge'),
+                get_string('newuseridonlog', 'tool_iomadmerge'),
+                get_string('mergedbyuseridonlog', 'tool_iomadmerge'),
+                get_string('date'),
+                get_string('status'),
+                ''
+            );
 
             $rows = array();
             foreach ($logs as $i => $log) {
@@ -319,6 +318,9 @@ class tool_iomadmerge_renderer extends plugin_renderer_base
                     ($log->to)
                         ? $this->show_user($log->touserid, $log->to)
                         : get_string('deleted', 'tool_iomadmerge', $log->touserid),
+                    ($log->mergedby)
+                        ? $this->show_user($log->mergedbyuserid, $log->mergedby)
+                        : get_string('nomergedby', 'tool_iomadmerge'),
                     userdate($log->timemodified, get_string('strftimedaydatetime', 'langconfig')),
                     $flags[$log->success],
                     html_writer::link(

@@ -15,19 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
- *
- * @package    tool
+ * @package tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author Jordi Pujol-Ahulló <jordi.pujol@urv.cat>
+ * @copyright 2013 Servei de Recursos Educatius (http://www.sre.urv.cat)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -68,7 +59,7 @@ class CLIGathering implements Gathering {
     /**
      * Asks by command line both users to merge, with a header telling what to do.
      */
-    public function rewind()
+    public function rewind(): void
     {
         cli_heading(get_string('pluginname', 'tool_iomadmerge'));
         echo get_string('cligathering:description', 'tool_iomadmerge') . "\n\n";
@@ -80,7 +71,7 @@ class CLIGathering implements Gathering {
      * Asks for the next pair of users' id to merge.
      * It also detects when anything but a number is introduced, to re-ask for any user id.
      */
-    public function next()
+    public function next(): void
     {
         $record = new stdClass();
 
@@ -113,7 +104,7 @@ class CLIGathering implements Gathering {
      * @return bool true if to go on with the iteration (we have a pair of users to merge).
      * false to conclude.
      */
-    public function valid()
+    public function valid(): bool
     {
         return !$this->end;
     }
@@ -122,7 +113,7 @@ class CLIGathering implements Gathering {
      * Gets the current pair of users to merge.
      * @return stdClass object with fromid and toid fields
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->current;
     }
@@ -131,7 +122,7 @@ class CLIGathering implements Gathering {
      * Gets current int zero-based index.
      * @return int zero-based index value
      */
-    public function key()
+    public function key(): mixed
     {
         return $this->index;
     }

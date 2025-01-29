@@ -15,17 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool
+ * @package tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author Jordi Pujol-Ahulló <jordi.pujol@urv.cat>
+ * @copyright 2013 Servei de Recursos Educatius (http://www.sre.urv.cat)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -50,12 +43,13 @@ class tool_iomadmerge_logger {
      * or a problem description if merging failed.
      */
     public function log($touserid, $fromuserid, $success, $log) {
-        global $DB;
+        global $DB, $USER;
 
         $record = new stdClass();
         $record->touserid = $touserid;
         $record->fromuserid = $fromuserid;
         $record->timemodified = time();
+        $record->mergedbyuserid = $USER->id;
         $record->success = (int)$success;
         $record->log = json_encode($log); //to get it
 
@@ -67,7 +61,7 @@ class tool_iomadmerge_logger {
             if (CLI_SCRIPT) {
                 cli_error($msg);
             } else {
-                throw new moodle_exception($msg, null, new moodle_url('/admin/tool/iomadmerge/index.php'));
+                print_error($msg, null, new moodle_url('/admin/tool/iomadmerge/index.php'));
             }
         }
     }
@@ -110,10 +104,10 @@ class tool_iomadmerge_logger {
                     $filtersql .= " AND $filteritem = :$filteritem";
                 }
             }
-            $logs = $DB->get_records_sql("SELECT id, touserid, fromuserid, success, timemodified FROM {tool_iomadmerge}
+            $logs = $DB->get_records_sql("SELECT id, touserid, fromuserid, mergedbyuserid, success, timemodified FROM {tool_iomadmerge}
                                           $departmentsql $filtersql ORDER BY $sort", $filter, $limitfrom, $limitnum);
         } else {
-            $logs = $DB->get_records('tool_iomadmerge', $filter, $sort, 'id, touserid, fromuserid, success, timemodified', $limitfrom, $limitnum);
+            $logs = $DB->get_records('tool_iomadmerge', $filter, $sort, 'id, touserid, fromuserid, mergedbyuserid, success, timemodified', $limitfrom, $limitnum);
         }
 
         if (!$logs) {
@@ -122,6 +116,12 @@ class tool_iomadmerge_logger {
         foreach ($logs as $id => &$log) {
             $log->to = $DB->get_record('user', array('id' => $log->touserid));
             $log->from = $DB->get_record('user', array('id' => $log->fromuserid));
+
+            if (empty($log->mergedbyuserid)) {
+                $log->mergedby = null;
+            } else {
+                $log->mergedby = $DB->get_record('user', array('id' => $log->mergedbyuserid));
+            }
         }
         return $logs;
     }

@@ -19,19 +19,14 @@
 /**
  * User review table util file
  *
- * Version information
- *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
  * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
  * @author     Mike Holzer
  * @author     Forrest Gaston
  * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author     Jordi Pujol-Ahulló, Sred, Universitat Rovira i Virgili
+ * @author     John Hoopes <hoopes@wisc.edu>, Univeristy of Wisconsin - Madison
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -43,7 +38,6 @@ global $CFG;
 // require needed library files
 require_once($CFG->dirroot . '/lib/clilib.php');
 require_once(__DIR__ . '/autoload.php');
-require_once($CFG->dirroot . '/lib/outputcomponents.php');
 
 /**
  * Extend the html table to provide a build function inside for creating a table

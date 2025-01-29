@@ -19,24 +19,16 @@
  *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author     Andrew Hancox <andrewdchancox@googlemail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_iomadmerge_enrolments_testcase extends advanced_testcase {
+class enrolments_test extends advanced_testcase {
     /**
      * Setup the test.
      */
     public function setUp(): void {
         global $CFG;
-        require_once("$CFG->dirroot/admin/tool/iomadmerge/lib/iomadmergetool.php");
+        require_once("$CFG->dirroot/admin/tool/iomadmerge/lib/mergeusertool.php");
         $this->resetAfterTest(true);
     }
 
@@ -84,7 +76,7 @@ class tool_iomadmerge_enrolments_testcase extends advanced_testcase {
         $this->assertCount(2, $courses);
         $this->assertEquals(array($course2->id, $course3->id), array_keys($courses));
 
-        $mut = new IomadMergeTool();
+        $mut = new IOMADMergeUserTool();
         list($success, $log, $logid) = $mut->merge($user_keep->id, $user_remove->id);
 
         // Check $user_remove is suspended.

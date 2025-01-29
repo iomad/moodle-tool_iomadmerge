@@ -20,18 +20,13 @@
  *
  * The effort of all given authors below gives you this current version of the file.
  *
- * Version information
- *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
  * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
  * @author     Mike Holzer
  * @author     Forrest Gaston
  * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
+ * @author     Jordi Pujol-Ahulló <jordi.pujol@urv.cat>,  SREd, Universitat Rovira i Virgili
  * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -50,7 +45,7 @@ require_once($CFG->dirroot . '/'.$CFG->admin.'/tool/iomadmerge/lib.php');
  *
  * Lifecycle:
  * <ol>
- *   <li>Once: <code>$mut = new IomadMergeTool();</code></li>
+ *   <li>Once: <code>$mut = new IOMADMergeUserTool();</code></li>
  *   <li>N times: <code>$mut->merge($from, $to);</code> Passing two objects with at least
  *   two attributes ('id' and 'username') on each, this will merge the user $from into the
  *   user $to, so that the $from user will be empty of activity.</li>
@@ -58,7 +53,7 @@ require_once($CFG->dirroot . '/'.$CFG->admin.'/tool/iomadmerge/lib.php');
  *
  * @author Jordi Pujol-Ahulló
  */
-class IomadMergeTool
+class IOMADMergeUserTool
 {
     /**
      * @var array associative array showing the user-related fields per database table,
@@ -162,7 +157,7 @@ class IomadMergeTool
                     cli_error('Error: ' . __METHOD__ . ':: ' . get_string('notablemergerclass', 'tool_iomadmerge',
                                     $class));
                 } else {
-                    throw new moodle_exception('notablemergerclass', 'tool_iomadmerge',
+                    print_error('notablemergerclass', 'tool_iomadmerge',
                             new moodle_url('/admin/tool/iomadmerge/index.php'), $class);
                 }
             }
@@ -420,7 +415,7 @@ class IomadMergeTool
                 cli_error('Error: ' . __METHOD__ . ':: ' . get_string('errortransactionsonly', 'tool_iomadmerge',
                                 $CFG->dbtype));
             } else {
-                throw new moodle_exception('errortransactionsonly', 'tool_iomadmerge',
+                print_error('errortransactionsonly', 'tool_iomadmerge',
                         new moodle_url('/admin/tool/iomadmerge/index.php'), $CFG->dbtype);
             }
         }

@@ -15,20 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
- *
- * @package    tool
- * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author    Daniel Tomé <danieltomefer@gmail.com>
+ * @copyright 2018 Servei de Recursos Educatius (http://www.sre.urv.cat)
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -36,7 +24,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../lib/db/inmemoryfindbyquery.php');
 require_once(__DIR__ . '/../lib/duplicateddata/assignsubmissionduplicateddatamerger.php');
 
-class tool_iomadmerge_assign_submission_duplicated_testcase extends advanced_testcase {
+class assign_submission_duplicated_test extends advanced_testcase {
 
     /**
      * Should do nothing with new submission and remove old submission when old user has no content submission

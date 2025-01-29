@@ -17,19 +17,9 @@
 /**
  * View merging logs.
  *
- * Version information
- *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author     Jordi Pujol-Ahulló, Sred, Universitat Rovira i Virgili
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -50,6 +40,35 @@ require_capability('tool/iomadmerge:iomadmerge', context_system::instance());
 admin_externalpage_setup('tool_iomadmerge_viewlog');
 
 $logger = new tool_iomadmerge_logger();
+
+$export = optional_param('export', 0, PARAM_BOOL);
+
+if ($export) {
+    require_once($CFG->dirroot . '/lib/csvlib.class.php');
+    $csv = new csv_export_writer();
+    $logs = $logger->get();
+    $headings = ['id', 'touserid', 'to', 'fromuserid', 'from', 'mergedbyuserid', 'mergedby', 'success', 'timemodified'];
+    $csv->add_data($headings);
+    foreach ($logs as $log) {
+        $successstringid = $log->success ? 'eventusermergedsuccess' : 'eventusermergedfailure';
+        $successstring = get_string($successstringid, 'tool_iomadmerge');
+        $exportlog = [
+            $log->id,
+            $log->touserid,
+            fullname($log->to),
+            $log->fromuserid,
+            fullname($log->from),
+            $log->mergedbyuserid,
+            ($log->mergedby) ? fullname($log->mergedby) : null,
+            $successstring,
+            userdate($log->timemodified)
+        ];
+        $csv->add_data($exportlog);
+    }
+
+    $csv->download_file();
+}
+
 $renderer = $PAGE->get_renderer('tool_iomadmerge');
 
 echo $renderer->logs_page($logger->get());

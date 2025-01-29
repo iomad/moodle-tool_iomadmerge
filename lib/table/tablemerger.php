@@ -18,19 +18,9 @@
 /**
  * Tool for merging users in a database table.
  *
- * Version information
- *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author     Jordi Pujol-Ahulló <jordi.pujol@urv.cat>,  SREd, Universitat Rovira i Virgili
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -40,10 +30,10 @@
  *
  * The lifecycle will be:
  *
- * 1. IomadMergeTool will call to TableMerger.getTablesToSkip(), to get the list
+ * 1. IOMADMergeUserTool will call to TableMerger.getTablesToSkip(), to get the list
  *    of tables not being processed by others TableMergers. This step is done
- *    only once in the configuration phase of the IomadMergeTool.
- * 2. IomadMergeTool calls to the TableMerger.merge() to actually merge records of
+ *    only once in the configuration phase of the IOMADMergeUserTool.
+ * 2. IOMADMergeUserTool calls to the TableMerger.merge() to actually merge records of
  *    the given $tablename. This call will update when necessary the list of
  *    errors (on $errorMessages) and the list of actions performed (on
  *    $actionLog).

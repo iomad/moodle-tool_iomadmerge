@@ -15,46 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
- *
- * @package    tool
+ * @package tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author Jordi Pujol-Ahulló <jordi.pujol@urv.cat>
+ * @copyright 2013 Servei de Recursos Educatius (http://www.sre.urv.cat)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once __DIR__ . '/autoload.php';
+defined('MOODLE_INTERNAL') || die;
+
+global $CFG;
+require_once($CFG->dirroot . '/lib/clilib.php');
+require_once(__DIR__ . '/autoload.php');
 
 class Merger {
     /**
-     * @var IomadMergeTool instance of the tool.
+     * @var IOMADMergeUserTool instance of the tool.
      */
     protected $mut;
 
     /**
-     * Initializes the IomadMergeTool to process any incoming merging action through
+     * Initializes the IOMADMergeUserTool to process any incoming merging action through
      * any Gathering instance.
      */
-    public function __construct(IomadMergeTool $mut) {
+    public function __construct(IOMADMergeUserTool $mut) {
         $this->mut = $mut;
         $this->logger = new tool_iomadmerge_logger();
 
-        // to catch Ctrl+C interruptions, we need this stuff.
+        // To catch Ctrl+C interruptions, we need this stuff.
         declare(ticks = 1);
 
         if (extension_loaded('pcntl')) {
-            pcntl_signal(SIGINT, array(
-                $this,
-                'aborting'
-            ));
+            pcntl_signal(SIGINT, [$this, 'aborting']);
         }
     }
 
@@ -64,9 +56,9 @@ class Merger {
      */
     public function aborting($signo) {
         if (defined("CLI_SCRIPT")) {
-            echo "\n\n" . get_string('ok') . ", exit!\n\n";
+            echo "\n\nAborting!\n\n";
         }
-        exit(0); //quiting normally after all ;-)
+        exit(0); // Exiting without error.
     }
 
     /**
@@ -75,16 +67,23 @@ class Merger {
      * @param Gathering $gathering List of merging actions.
      */
     public function merge(Gathering $gathering) {
+        $numberoperations = 0;
         foreach ($gathering as $action) {
             list($success, $log, $id) = $this->mut->merge($action->toid, $action->fromid);
 
-            // only shows results on cli script
+            // Only shows results on cli script.
             if (defined("CLI_SCRIPT")) {
-                echo (($success)?get_string("success"):get_string("error")) . ". Log id: " . $id . "\n\n";
+                $status = ($success) ? "Success" : "Error";
+
+                cli_writeln('');
+                cli_writeln("From {$action->fromid} to {$action->toid}: $status; Log id: $id");
+                cli_writeln('');
             }
+            $numberoperations++;
         }
+
         if (defined("CLI_SCRIPT")) {
-            echo get_string('ok') .", exit!\n\n";
+            cli_writeln("${numberoperations} merge operations performed. Bye!");
         }
     }
 }

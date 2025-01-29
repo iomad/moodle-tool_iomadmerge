@@ -17,19 +17,10 @@
 /**
  * The user_merged_success event.
  *
- * Version information
- *
- * @package    tool
+ * @package tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author Gerard Cuello Adell <gerard.urv@gmail.com>
+ * @copyright 2016 Servei de Recursos Educatius (http://www.sre.urv.cat)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -48,10 +39,6 @@ class user_merged_success extends user_merged {
 
     public static function get_name() {
         return get_string('eventusermergedsuccess', 'tool_iomadmerge');
-    }
-
-    public static function get_legacy_eventname() {
-        return 'merging_success';
     }
 
     public function get_description() {

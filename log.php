@@ -17,19 +17,9 @@
 /**
  * View one merging log.
  *
- * Version information
- *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author     Jordi Pujol-Ahulló, Sred, Universitat Rovira i Virgili
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -55,7 +45,7 @@ $logger = new tool_iomadmerge_logger();
 $log = $logger->getDetail($id);
 
 if (empty($log)) {
-    throw new moodle_exception('wronglogid', 'tool_iomadmerge', new moodle_url('/admin/tool/iomadmerge/index.php')); //aborts execution
+    print_error('wronglogid', 'tool_iomadmerge', new moodle_url('/admin/tool/iomadmerge/index.php')); //aborts execution
 }
 
 $from = $DB->get_record('user', array('id' => $log->fromuserid), 'id, username');

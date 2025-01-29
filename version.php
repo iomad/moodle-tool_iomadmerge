@@ -17,11 +17,7 @@
 /**
  * Version information
  *
- * @package    tool
- * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
+ * @package    tool_iomadmerge
  * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
  * @author     Mike Holzer
  * @author     Forrest Gaston
@@ -33,8 +29,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->release  = '4.0.6 (Build: 20230116)'; // Human-friendly version name
-$plugin->version   = 2021072200;
-$plugin->requires  = 2020061500; // Moodle 3.9, 15 June 2020, https://docs.moodle.org/dev/Releases#Moodle_3.9_.28LTS.29
+$plugin->version = 2025012300;
+$plugin->release = '2025012300 (Happy 2025)';
+$plugin->requires = 2024100700; // Moodle 4.5+, https://moodledev.io/general/releases#moodle-45-lts.
 $plugin->component = 'tool_iomadmerge';
 $plugin->maturity = MATURITY_STABLE;

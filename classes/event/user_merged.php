@@ -19,19 +19,10 @@
  *
  * The base class for merge user accounts related actions.
  *
- * Version information
- *
- * @package    tool
+ * @package tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author Gerard Cuello Adell <gerard.urv@gmail.com>
+ * @copyright 2016 Servei de Recursos Educatius (http://www.sre.urv.cat)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -60,21 +51,5 @@ abstract class user_merged extends \core\event\base {
         $this->data['crud'] = 'u';      // Usually we perform update db queries so 'u' its ok!
         $this->data['level'] = self::LEVEL_OTHER; // fixing backwards compatibility
         $this->data['edulevel'] = self::LEVEL_OTHER;
-    }
-
-    /**
-     * It will allow legacy plugins to continue to listen user_merged events
-     * without upgrading their listeners.
-     *
-     * @return \stdClass legacy object
-     */
-    protected function get_legacy_eventdata() {
-        $data = new \stdClass();
-        $userinvolded = $this->other['usersinvolved'];
-        $data->newid = $userinvolded['toid'];
-        $data->oldid = $userinvolded['fromid'];
-        $data->log = $this->other['log'];
-        $data->timemodified = $this->timecreated;
-        return $data;
     }
 }

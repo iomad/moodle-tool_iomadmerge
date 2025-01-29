@@ -19,34 +19,29 @@
  *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
- * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
- * @author     Mike Holzer
- * @author     Forrest Gaston
- * @author     Juan Pablo Torres Herrera
- * @author     Jordi Pujol-Ahulló, SREd, Universitat Rovira i Virgili
- * @author     John Hoopes <hoopes@wisc.edu>, University of Wisconsin - Madison
+ * @author     Andrew Hancox <andrewdchancox@googlemail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/mod/assign/tests/base_test.php');
+require_once($CFG->dirroot . '/mod/assign/tests/generator.php');
 
 /**
  * Class assign_test
  */
-class tool_iomadmerge_assign_testcase extends mod_assign_base_testcase {
+class assign_test extends advanced_testcase {
+    use \mod_assign_test_generator;
+
     /**
      *
      */
     public function setUp(): void {
         global $CFG;
-        require_once("$CFG->dirroot/admin/tool/iomadmerge/lib/iomadmergetool.php");
+        require_once("$CFG->dirroot/admin/tool/iomadmerge/lib/mergeusertool.php");
         parent::setUp();
+        $this->resetAfterTest();
     }
 
     /**
@@ -58,32 +53,32 @@ class tool_iomadmerge_assign_testcase extends mod_assign_base_testcase {
     public function test_mergenonconflictingassigngrades() {
         global $DB;
 
-        $this->setUser($this->editingteachers[0]);
-        $assign = $this->create_instance();
-
-        $this->setUser($this->teachers[0]);
+        $course = $this->getDataGenerator()->create_course();
+        $student1 = $this->getDataGenerator()->create_and_enrol($course, 'student');
+        $student2 = $this->getDataGenerator()->create_and_enrol($course, 'student');
+        $assign = $this->create_instance($course);
 
         // Give a grade to student 1.
         $data = new stdClass();
         $data->grade = '75.0';
-        $assign->testable_apply_grade_to_user($data, $this->students[1]->id, 0);
+        $assign->testable_apply_grade_to_user($data, $student2->id, 0);
 
         // Check initial state - student 0 has no grade, student 1 has 75.00.
-        $this->assertEquals(false, $assign->testable_is_graded($this->students[0]->id));
-        $this->assertEquals(true, $assign->testable_is_graded($this->students[1]->id));
-        $this->assertEquals('75.00', $this->get_user_assign_grade($this->students[1], $assign, $this->course));
-        $this->assertEquals('-', $this->get_user_assign_grade($this->students[0], $assign, $this->course));
+        $this->assertEquals(false, $assign->testable_is_graded($student1->id));
+        $this->assertEquals(true, $assign->testable_is_graded($student2->id));
+        $this->assertEquals('75.00', $this->get_user_assign_grade($student2, $assign, $course));
+        $this->assertEquals('-', $this->get_user_assign_grade($student1, $assign, $course));
 
         // Merge student 1 into student 0.
-        $mut = new IomadMergeTool();
-        $mut->merge($this->students[0]->id, $this->students[1]->id);
+        $mut = new IOMADMergeUserTool();
+        $mut->merge($student1->id, $student2->id);
 
         // Student 0 should now have a grade of 75.00.
-        $this->assertEquals(true, $assign->testable_is_graded($this->students[0]->id));
-        $this->assertEquals('75.00', $this->get_user_assign_grade($this->students[0], $assign, $this->course));
+        $this->assertEquals(true, $assign->testable_is_graded($student1->id));
+        $this->assertEquals('75.00', $this->get_user_assign_grade($student1, $assign, $course));
 
         // Student 1 should now be suspended.
-        $user_remove = $DB->get_record('user', array('id' => $this->students[1]->id));
+        $user_remove = $DB->get_record('user', array('id' => $student2->id));
         $this->assertEquals(1, $user_remove->suspended);
     }
 

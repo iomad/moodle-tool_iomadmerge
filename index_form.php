@@ -19,9 +19,6 @@
  *
  * @package    tool
  * @subpackage iomadmerge
- * @copyright  Derick Turner
- * @author     Derick Turner
- * @basedon    admin tool merge by:
  * @author     Nicolas Dunand <Nicolas.Dunand@unil.ch>
  * @author     Mike Holzer
  * @author     Forrest Gaston
@@ -36,7 +33,7 @@ require_once($CFG->libdir.'/formslib.php'); /// forms library
 /**
  * Define form snippet for getting the userids of the two users to merge
  */
-class iomadmergeform extends moodleform {
+class mergeuserform extends moodleform {
 
     /**
      * Form definition
